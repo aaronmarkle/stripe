@@ -1,4 +1,16 @@
-app = angular.module('ticketSocket', ['ui.bootstrap', 'ngAnimate']);
+app = angular.module('ticketSocket', ['ui.bootstrap', 'ngAnimate', 'ui.router']);
+
+app.config(function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/home');
+  $stateProvider
+    .state('home', {
+      url: '/home'
+    })
+    .state('ticketType', {
+      url: '/ticketType',
+      templateUrl: 'partial-ticketType.html',
+    });
+});
 
 app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
   $scope.animationEnabled = true;
@@ -7,31 +19,29 @@ app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
       animation: true,
       templateUrl: 'buyTicketsModalContent.html',
       controller: 'ModalInstanceCtrl',
-      size: 'md',
-      resolve: {
-        items: function() {
-          return $scope.items;
-        }
-      }
-    });
-    modalInstance.result.then(function(selectedItem) {
-      $scope.selected = selectedItem;
-    }, function() {
-      $log.info('Modal dismissed at ' + new Date());
+      size: 'md'
     });
   };
 });
 
 app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, getEvents) {
+  $scope.eventSelection = {};
   getEvents.getEvents().then(function(response) {
-    $scope.eventSelection = response.data;
+    $scope.eventSelection.list = response.data;
   });
-  $scope.ok = function() {
-    $uibModalInstance.close($scope.selected.item);
+  $scope.submit = function() {
+    $scope.selectedEvent = myEvent.choice;
   };
   $scope.cancel = function() {
     $uibModalInstance.dismiss('cancel');
   };
+});
+
+app.controller('TicketTypeCtrl', function($scope, getTicketTypes) {
+  getTicketTypes.getTicketTypes($scope.eventSelection.selected).then(function(response) {
+    $scope.ticketTypes = response.data;
+    console.log($scope.ticketTypes);
+  });
 });
 
 app.factory('getEvents', function($http) {
@@ -40,5 +50,14 @@ app.factory('getEvents', function($http) {
   }
   return {
     getEvents: getEvents
+  }
+});
+
+app.factory('getTicketTypes', function($http)  {
+  function getTicketTypes(eventId) {
+    return $http.get('http://rcastillo.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
+  }
+  return {
+    getTicketTypes: getTicketTypes
   }
 });

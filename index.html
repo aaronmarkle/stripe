@@ -13,20 +13,22 @@
 <body ng-app="ticketSocket">
   <div ng-controller="buyTicketsModal">
     <script type="text/ng-template" id="buyTicketsModalContent.html">
-      <div class="modal-header">
-        <h3 class="modal-title">Welcome to YOURNAMESocket, select an event to buy your tickets.</h3>
-      </div>
-      <div class="modal-body">
-        <form name="chooseEvent" ng-submit="submit()">
-          <select name="eventSelect" id="eventSelect" class="form-control" ng-model="selectedEvent">
-            <option value="" disabled selected>Please select an event</option>
-            <option ng-repeat="events in eventSelection.data" value="{{events.id}}">{{events.title}}</option>
-          </select>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="submit()" ng-disabled="!selectedEvent">Proceed</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+      <div ui-view>
+        <div class="modal-header">
+          <h3 class="modal-title">Welcome to YOURNAMESocket, select an event to buy your tickets.</h3>
+        </div>
+        <div class="modal-body">
+          <form name="chooseEvent" ng-submit="submit()">
+            <select name="eventSelect" id="eventSelect" class="form-control" ng-model="eventSelection.selected">
+              <option value="" disabled selected>Please select an event</option>
+              <option ng-repeat="events in eventSelection.list.data" value="{{events.id}}">{{events.title}}</option>
+            </select>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <a ui-sref="ticketType" class="btn btn-primary" type="button" ng-disabled="!eventSelection.selected">Proceed</a>
+          <a ui-sref="home" class="btn btn-warning" type="button" ng-click="cancel()">Cancel</a>
+        </div>
       </div>
     </script>
     <button id="buyTickets" class="btn btn-lg btn-primary center-block" ng-click="open()">Buy Tickets</button>
