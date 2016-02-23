@@ -46,7 +46,7 @@ app.controller('TicketTypeCtrl', function($scope, getTicketTypes) {
 
 app.factory('getEvents', function($http) {
   function getEvents() {
-    return $http.get('http://rcastillo.ticketsocket.com/api/v1/events');
+    return $http.get('http://qa-demo.ticketsocket.com/api/v1/events');
   }
   return {
     getEvents: getEvents
@@ -55,7 +55,7 @@ app.factory('getEvents', function($http) {
 
 app.factory('getTicketTypes', function($http)  {
   function getTicketTypes(eventId) {
-    return $http.get('http://rcastillo.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
+    return $http.get('http://qa-demo.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
   }
   return {
     getTicketTypes: getTicketTypes
