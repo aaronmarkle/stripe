@@ -14,18 +14,18 @@
   <div ng-controller="buyTicketsModal">
     <script type="text/ng-template" id="buyTicketsModalContent.html">
       <div class="modal-header">
-        <h3 class="modal-title">I am a modal!</h3>
+        <h3 class="modal-title">Welcome to YOURNAMESocket, select an event to buy your tickets.</h3>
       </div>
       <div class="modal-body">
-        <ul>
-          <li ng-repeat="item in items">
-            <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-          </li>
-        </ul>
-        Selected: <b>{{ selected.item }}</b>
+        <form name="chooseEvent" ng-submit="PLACEHOLDER">
+          <select name="eventSelect" id="eventSelect" class="form-control" ng-model="selectedEvent">
+            <option value="" disabled selected>Please select an event</option>
+            <option ng-repeat="events in eventSelection.data" value="{{events.id}}">{{events.title}}</option>
+          </select>
+        </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-primary" type="button" ng-click="ok()">Proceed</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
       </div>
     </script>
