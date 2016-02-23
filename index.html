@@ -17,7 +17,7 @@
         <h3 class="modal-title">Welcome to YOURNAMESocket, select an event to buy your tickets.</h3>
       </div>
       <div class="modal-body">
-        <form name="chooseEvent" ng-submit="PLACEHOLDER">
+        <form name="chooseEvent" ng-submit="submit()">
           <select name="eventSelect" id="eventSelect" class="form-control" ng-model="selectedEvent">
             <option value="" disabled selected>Please select an event</option>
             <option ng-repeat="events in eventSelection.data" value="{{events.id}}">{{events.title}}</option>
@@ -25,12 +25,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok()">Proceed</button>
+        <button class="btn btn-primary" type="button" ng-click="submit()" ng-disabled="!selectedEvent">Proceed</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
       </div>
     </script>
     <button id="buyTickets" class="btn btn-lg btn-primary center-block" ng-click="open()">Buy Tickets</button>
-    <div ng-show="selected">Selection from modal: {{ selected }}</div>
   </div>
 </body>
 </html>
