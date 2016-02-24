@@ -1,3 +1,7 @@
 #buyTickets {
   margin-top: 40vh;
 }
+
+.alert {
+  display: block;
+}

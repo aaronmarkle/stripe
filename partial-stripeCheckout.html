@@ -1,36 +1,38 @@
 <div ng-controller="StripeCheckoutCtrl">
-  <div class="modal-header">
-    <h3 class="modal-title">Checkout with Stripe</h3>
-  </div>
-  <div class="modal-body">
-    <form id="payment-form" ng-submit="submit()">
-      <span class="payment-errors"></span>
-      <p>Payment Total: ${{paymentTotal}}</p>
+  <form id="payment-form" ng-submit="submit()">
+    <div class="modal-header">
+      <h3 class="modal-title">Checkout with Stripe</h3>
+    </div>
+    <div class="modal-body">
+      <span class="alert alert-danger" ng-show="tokenError">{{tokenError}}</span>
       <div class="form-row">
-        <label>
-          <span>Card Number</span>
-          <input type="text" size="20" ng-model="card.number" data-stripe="number"/>
-        </label>
+        <label>First Name </label>
+        <input type="text" size="14" ng-model="card.firstname" data-stripe="firstname">
+        <label>Last Name </label>
+        <input type="text" size="14" ng-model="card.lastname" data-stripe="lastname">
       </div>
       <div class="form-row">
-        <label>
-          <span>CVC</span>
-          <input type="text" size="4" ng-model="card.cvc" data-stripe="cvc"/>
-        </label>
+        <label>Zip Code </label>
+        <input type="text" size="5" ng-model="card.zip" data-stripe="zip">
       </div>
       <div class="form-row">
-        <label>
-          <span>Expiration (MM/YYYY)</span>
-          <input type="text" size="2" ng-model="card.expirymonth" data-stripe="exp-month"/>
-        </label>
-        <span> / </span>
-        <input type="text" size="4" ng-model="card.expiryyear" data-stripe="exp-year"/>
+        <label>Card Number </label>
+        <input type="text" size="20" ng-model="card.number" data-stripe="number">
       </div>
-      <button type="submit">Submit Payment</button>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <a ui-sref="checkout" class="btn btn-primary" type="button" ng-disabled="!getTotal()">Proceed</a>
-    <a ui-sref="home" class="btn btn-warning" type="button" ng-click="cancel()">Cancel</a>
-  </div>
+      <div class="form-row">
+        <label>CVC </label>
+        <input type="text" size="4" ng-model="card.cvc" data-stripe="cvc">
+      </div>
+      <div class="form-row">
+        <label>Expiration (MM/YYYY) </label>
+        <input type="text" size="2" ng-model="card.expirymonth" data-stripe="exp-month">
+        <label>/</label>
+        <input type="text" size="4" ng-model="card.expiryyear" data-stripe="exp-year">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Charge ${{paymentTotal}}</button>
+      <a ui-sref="home" class="btn btn-warning" type="button" ng-click="cancel()">Cancel</a>
+    </div>
+  </form>
 </div>

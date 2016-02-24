@@ -17,6 +17,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url:'/checkout',
       templateUrl: 'partial-stripeCheckout.html',
     })
+    .state('success', {
+      url:'/success',
+      templateUrl: 'partial-success.html'
+    })
 });
 
 app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
@@ -61,18 +65,20 @@ app.controller('TicketTypeCtrl', function($scope, getTicketTypes, checkoutTotal)
   });
 });
 
-app.controller('StripeCheckoutCtrl', function($scope, $http, checkoutTotal) {
+app.controller('StripeCheckoutCtrl', function($scope, $http, $state, checkoutTotal) {
   $scope.paymentTotal = checkoutTotal.getTotal();
   $scope.card = {};
+  $scope.card.amount = $scope.paymentTotal;
   function stripeResponseHandler(status, response) {
     if (response.error) {
-      console.log(response.error.message);
+      $scope.tokenError = response.error.message;
     } else {
       var token = response.id;
       $scope.card.stripeToken = token;
       $http.post('/creditAuth', $scope.card)
         .success(function(data) {
-          vm.results = data;
+          $scope.results = data;
+          $state.transitionTo('success');
         })
     }
   }
