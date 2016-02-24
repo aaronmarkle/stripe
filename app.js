@@ -28,6 +28,7 @@ app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
   $scope.open = function() {
     var modalInstance = $uibModal.open({
       animation: true,
+      backdrop: 'static',
       templateUrl: 'buyTicketsModalContent.html',
       controller: 'ModalInstanceCtrl',
       size: 'md'
@@ -36,8 +37,9 @@ app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
 });
 
 app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, getEvents) {
+  $scope.username = 'qa-demo';
   $scope.eventSelection = {};
-  getEvents.getEvents().then(function(response) {
+  getEvents.getEvents($scope.username).then(function(response) {
     $scope.eventSelection.list = response.data;
   });
   $scope.submit = function() {
@@ -49,7 +51,8 @@ app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, getEvent
 });
 
 app.controller('TicketTypeCtrl', function($scope, getTicketTypes, checkoutTotal) {
-  getTicketTypes.getTicketTypes($scope.eventSelection.selected).then(function(response) {
+  $scope.username = 'qa-demo';
+  getTicketTypes.getTicketTypes($scope.username, $scope.eventSelection.selected).then(function(response) {
     $scope.ticketTypes = response.data;
     for (var i=0; i<$scope.ticketTypes.data.length; i++) {
       $scope.ticketTypes.data[i].amount = 0;
@@ -93,8 +96,8 @@ app.controller('StripeCheckoutCtrl', function($scope, $http, $state, checkoutTot
 });
 
 app.factory('getEvents', function($http) {
-  function getEvents() {
-    return $http.get('http://qa-demo.ticketsocket.com/api/v1/events');
+  function getEvents(username) {
+    return $http.get('http://' + username + '.ticketsocket.com/api/v1/events');
   }
   return {
     getEvents: getEvents
@@ -102,8 +105,8 @@ app.factory('getEvents', function($http) {
 });
 
 app.factory('getTicketTypes', function($http)  {
-  function getTicketTypes(eventId) {
-    return $http.get('http://qa-demo.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
+  function getTicketTypes(username, eventId) {
+    return $http.get('http://' + username + '.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
   }
   return {
     getTicketTypes: getTicketTypes

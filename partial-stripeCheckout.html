@@ -1,7 +1,7 @@
 <div ng-controller="StripeCheckoutCtrl">
   <form id="payment-form" ng-submit="submit()">
     <div class="modal-header">
-      <h3 class="modal-title">Checkout with Stripe</h3>
+      <a ui-sref="home">Home</a> > <a ui-sref="ticketType">Select Tickets</a> > Checkout
     </div>
     <div class="modal-body">
       <span class="alert alert-danger" ng-show="tokenError">{{tokenError}}</span>

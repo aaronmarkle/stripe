@@ -1,8 +1,9 @@
 <div ng-controller="TicketTypeCtrl">
 <div class="modal-header">
-  <h3 class="modal-title">Select your ticket type and quantity</h3>
+  <a ui-sref="home">Home</a> > Select ticketTypes
 </div>
 <div class="modal-body">
+  <p class="h4">Select your ticket type and quantity</p>
   <form name="chooseTicketTypes">
     <p ng-repeat="types in ticketTypes.data">
       {{types.name}} x ${{types.price}} x 
