@@ -1,5 +1,8 @@
 app = angular.module('ticketSocket', ['ui.bootstrap', 'ngAnimate', 'ui.router']);
 
+//Stripe Configuration
+Stripe.setPublishableKey('pk_test_XufkDRqkvLQIXIWK2QO7Mw2I');
+
 app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/home');
   $stateProvider
@@ -9,7 +12,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('ticketType', {
       url: '/ticketType',
       templateUrl: 'partial-ticketType.html',
-    });
+    })
+    .state('checkout', {
+      url:'/checkout',
+      templateUrl: 'partial-stripeCheckout.html',
+    })
 });
 
 app.controller('buyTicketsModal', function($scope, $uibModal, $log) {
@@ -37,20 +44,46 @@ app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, getEvent
   };
 });
 
-app.controller('TicketTypeCtrl', function($scope, getTicketTypes) {
+app.controller('TicketTypeCtrl', function($scope, getTicketTypes, checkoutTotal) {
   getTicketTypes.getTicketTypes($scope.eventSelection.selected).then(function(response) {
     $scope.ticketTypes = response.data;
     for (var i=0; i<$scope.ticketTypes.data.length; i++) {
       $scope.ticketTypes.data[i].amount = 0;
     }
     $scope.getTotal = function() {
-      var total = 0;
+      $scope.currentTotal = 0;
       for (var i=0; i<$scope.ticketTypes.data.length; i++) {
-        total += $scope.ticketTypes.data[i].amount * $scope.ticketTypes.data[i].price;
+        $scope.currentTotal += $scope.ticketTypes.data[i].amount * $scope.ticketTypes.data[i].price;
+        checkoutTotal.setTotal($scope.currentTotal);
       }
-      return total;
+      return $scope.currentTotal;
     }
   });
+});
+
+app.controller('StripeCheckoutCtrl', function($scope, $http, checkoutTotal) {
+  $scope.paymentTotal = checkoutTotal.getTotal();
+  $scope.card = {};
+  function stripeResponseHandler(status, response) {
+    if (response.error) {
+      console.log(response.error.message);
+    } else {
+      var token = response.id;
+      $scope.card.stripeToken = token;
+      $http.post('/creditAuth', $scope.card)
+        .success(function(data) {
+          vm.results = data;
+        })
+    }
+  }
+  $scope.submit = function() {
+    Stripe.card.createToken({
+    number: $scope.card.number,
+    cvc: $scope.card.cvc,
+    exp_month: $scope.card.expirymonth,
+    exp_year: $scope.card.expiryyear
+    }, stripeResponseHandler);
+  }
 });
 
 app.factory('getEvents', function($http) {
@@ -68,5 +101,18 @@ app.factory('getTicketTypes', function($http)  {
   }
   return {
     getTicketTypes: getTicketTypes
+  }
+});
+
+app.factory('checkoutTotal', function() {
+  function getTotal() {
+    return currentTotal;
+  }
+  function setTotal(amount) {
+    currentTotal = amount;
+  }
+  return {
+    getTotal: getTotal,
+    setTotal: setTotal
   }
 });
