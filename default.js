@@ -11,11 +11,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
     .state('ticketType', {
       url: '/ticketType',
-      templateUrl: 'partial-ticketType.html',
+      templateUrl: 'partial-ticketType.html'
     })
     .state('checkout', {
       url:'/checkout',
-      templateUrl: 'partial-stripeCheckout.html',
+      templateUrl: 'partial-stripeCheckout.html'
     })
     .state('success', {
       url:'/success',
