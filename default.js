@@ -97,7 +97,7 @@ app.controller('StripeCheckoutCtrl', function($scope, $http, $state, checkoutTot
 
 app.factory('getEvents', function($http) {
   function getEvents(username) {
-    return $http.get('http://' + username + '.ticketsocket.com/api/v1/events');
+    return $http.get('https://' + username + '.ticketsocket.com/api/v1/events');
   }
   return {
     getEvents: getEvents
@@ -106,7 +106,7 @@ app.factory('getEvents', function($http) {
 
 app.factory('getTicketTypes', function($http)  {
   function getTicketTypes(username, eventId) {
-    return $http.get('http://' + username + '.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
+    return $http.get('https://' + username + '.ticketsocket.com/api/v1/events/' + eventId + '/ticket-types');
   }
   return {
     getTicketTypes: getTicketTypes
