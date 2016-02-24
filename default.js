@@ -40,7 +40,16 @@ app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, getEvent
 app.controller('TicketTypeCtrl', function($scope, getTicketTypes) {
   getTicketTypes.getTicketTypes($scope.eventSelection.selected).then(function(response) {
     $scope.ticketTypes = response.data;
-    console.log($scope.ticketTypes);
+    for (var i=0; i<$scope.ticketTypes.data.length; i++) {
+      $scope.ticketTypes.data[i].amount = 0;
+    }
+    $scope.getTotal = function() {
+      var total = 0;
+      for (var i=0; i<$scope.ticketTypes.data.length; i++) {
+        total += $scope.ticketTypes.data[i].amount * $scope.ticketTypes.data[i].price;
+      }
+      return total;
+    }
   });
 });
 
