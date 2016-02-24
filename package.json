@@ -2,10 +2,10 @@
   "name": "ticket-socket-code-assessment",
   "version": "1.0.0",
   "description": "A checkout window for purchasing tickets using stripe payment.",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
